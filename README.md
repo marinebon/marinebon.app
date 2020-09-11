@@ -299,11 +299,12 @@ sudo chown -R admin /share
 cd /share/github
 git clone https://github.com/marinebon/www_marinebon.git
 
-# link special folders to admin home folder
-ln -s /srv/shiny-server     /home/admin/shiny_apps
-ln -s /var/log/shiny-server /home/admin/shiny_logs
-ln -s /share                /home/admin/share
-ln -s /share/github         /home/admin/github
+# link special folders to home folder
+user=admin
+ln -s /srv/shiny-server     /home/$user/shiny_apps
+ln -s /var/log/shiny-server /home/$user/shiny_logs
+ln -s /share                /home/$user/share
+ln -s /share/github         /home/$user/github
 ```
 
 Upload `marinebon.app_pass.txt` into `/share/config/`.
@@ -313,10 +314,8 @@ Upload `marinebon.app_pass.txt` into `/share/config/`.
 Since using docker postgis/postgis 12.3, try on rstudio Terminal:
 
 ```bash
-sudo apt-get update
-sudo apt-get install gdal-bin
 ogrinfo --version
-# GDAL 2.4.0, released 2018/12/14
+# GDAL 3.0.4, released 2020/01/28
 ```
 
 This was for a different project, but useful for future reference:
