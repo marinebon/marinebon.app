@@ -200,7 +200,7 @@ git clone https://github.com/marinebon/marinebon_app.git
 cd marinebon_app
 
 # set environment variables
-echo "PASSWORD=S3cr!tpw" > .env
+echo 'PASSWORD=S3cr!tpw' > .env
 echo 'HOST=marinebon.app' >> .env
 cat .env
 

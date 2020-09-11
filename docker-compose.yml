@@ -108,7 +108,7 @@ services:
   rstudio:
     container_name: rstudio
     build: ./rstudio-shiny
-    image: bdbest/rstudio:mpatlas
+    image: bdbest/rstudio-shiny:mbon.v01
     volumes:
       - /share:/share    
       - shiny-apps:/srv/shiny-server
