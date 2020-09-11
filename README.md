@@ -1,30 +1,27 @@
 # marinebon_app
-docker for marinebon.app
+docker for https://marinebon.app
 
 Contents:
 <!--
 To update table of contents run: `cat README.md | ./gh-md-toc -`
 Uses: https://github.com/ekalinin/github-markdown-toc
 -->
-
 * [Server software](#server-software)
-* [Shell into Amazon EC2 server](#shell-into-amazon-ec2-server)
-* [Install Docker](#install-docker)
-   * [docker](#docker)
-   * [docker-compose](#docker-compose)
-* [Build containers](#build-containers)
-   * [Test webserver](#test-webserver)
-* [Setup domain marinebon.app](#setup-domain-mpatlas4rorg)
-* [Run docker-compose](#run-docker-compose)
-* [marinebon.app manual post-docker install steps](#mpatlas4r_org-manual-post-docker-install-steps)
+* [Server setup &amp; docker run](#server-setup--docker-run)
+   * [Create server](#create-server)
+   * [Setup domain](#setup-domain)
+   * [Shell into server](#shell-into-server)
+   * [Check docker versions](#check-docker-versions)
+   * [Test docker](#test-docker)
+   * [Run docker-compose](#run-docker-compose)
 * [Docker maintenance](#docker-maintenance)
    * [Push docker image](#push-docker-image)
    * [Develop on local host](#develop-on-local-host)
    * [Operate on all docker containers](#operate-on-all-docker-containers)
    * [Inspect docker logs](#inspect-docker-logs)
-* [shiny app shuffle](#shiny-app-shuffle)
-* [erddap quick fix](#erddap-quick-fix)
-* [TODO](#todo)
+* [After docker setup](#after-docker-setup)
+   * [Download Github repos &amp; setup symbolic links](#download-github-repos--setup-symbolic-links)
+   * [Load spatial data into database](#load-spatial-data-into-database)
 
 ## Server software
 
@@ -48,8 +45,9 @@ Uses: https://github.com/ekalinin/github-markdown-toc
   - [docker-compose](https://docs.docker.com/compose/install/)
   - [nginx-proxy](https://github.com/jwilder/nginx-proxy)
 
+## Server setup & docker run
 
-## Create Server
+### Create server
 
 Created droplet at https://digitalocean.com with ben@ecoquants.com (Google login):
 
@@ -76,7 +74,7 @@ Created droplet at https://digitalocean.com with ben@ecoquants.com (Google login
 
 Note IP address generated with new droplet, in this case: `164.90.217.11`.
 
-## Setup domain marinebon.app
+### Setup domain
 
 - Bought domain **marinebon.app** for **$12/yr** with account bdbest@gmail.com.
 
@@ -91,7 +89,7 @@ Note IP address generated with new droplet, in this case: `164.90.217.11`.
   - **shiny**
 - Name: **www**, Type: **CNAME**, Data:**marinebon.app**
 
-## Shell into server
+### Shell into server
 
 ```bash
 ssh root@marinebon.app
@@ -108,7 +106,7 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added '192.241.142.34' (ECDSA) to the list of known hosts.
 ```
 
-## Check Docker
+### Check docker versions
 
 Confirm that `docker` and `docker-compose` are installed:
 
@@ -127,10 +125,7 @@ References:
 - [How To Install and Use Docker on Ubuntu 18.04 | DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04)
 - [Install Docker Compose | Docker Documentation](https://docs.docker.com/compose/install/)
 
-
-## Build containers
-
-### Test webserver
+### Test docker
 
 Reference:
 
@@ -181,7 +176,7 @@ Turn off:
 docker stop test-web
 ```
 
-## Run docker-compose
+### Run docker-compose
 
 References:
 
@@ -291,28 +286,9 @@ docker-compose logs -f
 docker inspect rstudio-shiny
 ```
 
-## Check ogr2ogr on rstudio 
+## After docker setup
 
-Since using docker postgis/postgis 12.3, try on rstudio Terminal:
-
-```bash
-sudo apt-get update
-sudo apt-get install gdal-bin
-ogrinfo --version
-# GDAL 2.4.0, released 2018/12/14
-```
-
-### Load db
-
-```bash
-passwd=`cat /share/config/marinebon.app_pass.txt`
-echo $passwd
-ogrinfo -ro PG:"host=postgis dbname=gis user=admin password=$passwd"
-
-ogr2ogr -f "PostgreSQL" PG:"host=postgis dbname=gis user=admin password=$passwd" "/share/mpatlas_mpa.gpkg" -nln "mpa_mpa" # -append
-```
-
-## Post-Docker build steps
+### Download Github repos & setup symbolic links
 
 In https://rstudio.marinebon.app Terminal as admin:
 
@@ -332,4 +308,23 @@ ln -s /share/github         /home/admin/github
 
 Upload `marinebon.app_pass.txt` into `/share/config/`.
 
+### Load spatial data into database
 
+Since using docker postgis/postgis 12.3, try on rstudio Terminal:
+
+```bash
+sudo apt-get update
+sudo apt-get install gdal-bin
+ogrinfo --version
+# GDAL 2.4.0, released 2018/12/14
+```
+
+This was for a different project, but useful for future reference:
+
+```bash
+passwd=`cat /share/config/marinebon.app_pass.txt`
+echo $passwd
+ogrinfo -ro PG:"host=postgis dbname=gis user=admin password=$passwd"
+
+ogr2ogr -f "PostgreSQL" PG:"host=postgis dbname=gis user=admin password=$passwd" "/share/mpatlas_mpa.gpkg" -nln "mpa_mpa" # -append
+```
