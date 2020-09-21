@@ -36,7 +36,7 @@ Uses: https://github.com/ekalinin/github-markdown-toc
     **rstudio.\***
 - Spatial engine:
   - [GeoServer](http://geoserver.org)<br>
-    **gs.\***
+    **geo.\***
   - [PostGIS](https://postgis.net)<br>
     marinebon.app **:5432**
 
@@ -44,6 +44,16 @@ Uses: https://github.com/ekalinin/github-markdown-toc
   - [docker](https://docs.docker.com/engine/installation/)
   - [docker-compose](https://docs.docker.com/compose/install/)
   - [nginx-proxy](https://github.com/jwilder/nginx-proxy)
+
+### TODO
+
+- **CKAN** data catalog
+  * [ioos/catalog-docker-base](https://github.com/ioos/catalog-docker-base): Docker Image for the base CKAN build for all CKAN related images
+  * [ioos/catalog-ckan](https://github.com/ioos/catalog-ckan): IOOS Catalog as a CKAN extension
+- **ERDDAP** data service
+  * [axiom-data-science/docker-erddap](https://github.com/axiom-data-science/docker-erddap): A feature full Tomcat (SSL over APR, etc.) running ERDDAP
+  * [ioos/erddap-gold-standard](https://github.com/ioos/erddap-gold-standard): Contains the 'gold standard' ERDDAP configuration, with datasets compliant with IOOS Metadata Profile 1.2
+  * [ERDDAP - Set Up Your Own ERDDAP](https://coastwatch.pfeg.noaa.gov/erddap/download/setup.html)
 
 ## Server setup & docker run
 

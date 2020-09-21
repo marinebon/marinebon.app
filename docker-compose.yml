@@ -86,8 +86,8 @@ services:
     container_name: geoserver
     image: kartoza/geoserver:latest # 2.15.5 on 2020-06-15
     environment:
-      VIRTUAL_HOST: "gs.$HOST"
-      LETSENCRYPT_HOST: "gs.$HOST"
+      VIRTUAL_HOST: "geo.$HOST"
+      LETSENCRYPT_HOST: "geo.$HOST"
       USERNAME: admin
       PASS: $PASSWORD
       GEOSERVER_ADMIN_PASSWORD: $PASSWORD
