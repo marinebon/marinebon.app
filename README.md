@@ -45,7 +45,7 @@ Uses: https://github.com/ekalinin/github-markdown-toc
   - [docker-compose](https://docs.docker.com/compose/install/)
   - [nginx-proxy](https://github.com/jwilder/nginx-proxy)
 
-### TODO
+### TODO: install server software
 
 - **CKAN** data catalog
   * [ioos/catalog-docker-base](https://github.com/ioos/catalog-docker-base): Docker Image for the base CKAN build for all CKAN related images
@@ -88,13 +88,14 @@ Note IP address generated with new droplet, in this case: `164.90.217.11`.
 
 - Bought domain **marinebon.app** for **$12/yr** with account bdbest@gmail.com.
 
-- DNS matched to server IP `164.90.217.11` to domain **marinebon.app** via [Google Domains]( https://domains.google.com/m/registrar/marinebon.app/dns), plus the following subdomains added under **Custom resource records** with:
+- DNS matched to server IP `164.90.217.11` to domain **marinebon.app** via [Google Domains](https://domains.google.com/m/registrar/marinebon.app/dns), plus the following subdomains added under **Custom resource records** with:
 
 - Type: **A**, Data:**164.90.217.11** and Name:
   - **@**
   - **api**
+  - **ckan**
   - **erddap**
-  - **geoserver**
+  - **geo**
   - **rstudio**
   - **shiny**
 - Name: **www**, Type: **CNAME**, Data:**marinebon.app**
@@ -305,9 +306,13 @@ In https://rstudio.marinebon.app Terminal as admin:
 ```bash
 sudo chown -R admin /share
 
+mkdir -p /share/data
+mkdir -p /share/github
+
 # git clone private repos
 cd /share/github
 git clone https://github.com/marinebon/www_marinebon.git
+
 
 # link special folders to home folder
 user=admin
@@ -318,6 +323,50 @@ ln -s /share/github         /home/$user/github
 ```
 
 Upload `marinebon.app_pass.txt` into `/share/config/`.
+
+
+### Add user
+
+```bash
+user=robertdcurrier
+#user=tylarmurray
+#user=ben
+pass=secr3t
+
+# delete user
+#deluser $user
+#docker exec rstudio userdel $user
+#docker exec rstudio rm -rf /home/$user
+
+# add user to host
+sudo adduser $user --gecos 'First Last,RoomNumber,WorkPhone,HomePhone' --disabled-password
+sh -c "echo $user:$pass | sudo chpasswd"
+sudo usermod -aG sudo $user
+
+# add user inside rstudio-shiny docker container from host
+docker exec rstudio adduser $user --gecos 'First Last,RoomNumber,WorkPhone,HomePhone' --disabled-password
+docker exec rstudio sh -c "echo $user:$pass | sudo chpasswd"
+
+# setup (once) staff to be shared by admin, and default permissions 775
+docker exec rstudio gpasswd -a admin staff
+docker exec rstudio sh -c "echo 'umask 002' >> /etc/profile"
+
+# setup (every user) primary group to staff
+docker exec rstudio gpasswd -a $user staff
+docker exec rstudio usermod -g staff $user
+
+# check groups for user in container
+docker exec rstudio groups $user
+
+# setup symbolic links in home dir
+docker exec rstudio bash -c \
+  "ln -s /share                      /home/$user/share; \
+   ln -s /share/data                 /home/$user/data; \
+   ln -s /share/github               /home/$user/github; \
+   ln -s /share/github/www_marinebon /home/$user/www; \
+   ln -s /srv/shiny-server           /home/$user/shiny; \
+   ln -s /var/log/shiny-server       /home/$user/shiny-logs"
+```
 
 ### Load spatial data into database
 
