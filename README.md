@@ -54,6 +54,10 @@ Uses: https://github.com/ekalinin/github-markdown-toc
   * [axiom-data-science/docker-erddap](https://github.com/axiom-data-science/docker-erddap): A feature full Tomcat (SSL over APR, etc.) running ERDDAP
   * [ioos/erddap-gold-standard](https://github.com/ioos/erddap-gold-standard): Contains the 'gold standard' ERDDAP configuration, with datasets compliant with IOOS Metadata Profile 1.2
   * [ERDDAP - Set Up Your Own ERDDAP](https://coastwatch.pfeg.noaa.gov/erddap/download/setup.html)
+- **Custom APIS** using Plumber
+  1. Extract ERDDAP gridded data from polygon, as informed by mregions ID or uploaded shapefile, return mean, stdev
+  1. Aggregate ERDDAP tabular data over space/time/taxa, eg from MARINe or CalCOFI
+  
 
 ## Server setup & docker run
 
