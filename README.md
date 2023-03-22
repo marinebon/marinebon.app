@@ -1,6 +1,10 @@
 # marinebon_app
 docker for https://marinebon.app
 
+## update 2023-03-22
+
+migrated to Ben's ecoquants server on Contabo (154.53.57.44) (see [ecoquants/server](https://github.com/ecoquants/server)) off DigitalOcean (164.90.217.11)
+
 Contents:
 <!--
 To update table of contents run: `cat README.md | ./gh-md-toc -`
